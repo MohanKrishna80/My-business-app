@@ -43,7 +43,7 @@ export default function ContactPage() {
             required: "Email is required",
             pattern: {
               value:
-                /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+               '@',
               message: "Invalid email address",
             },
           })}
