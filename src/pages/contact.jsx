@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm();
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert("Message sent!"); 
-    setFormData({ name: "", email: "", message: "" });
+  const onSubmit = (data) => {
+    alert("Message sent!");
+    reset();
   };
 
   return (
@@ -21,43 +22,57 @@ export default function ContactPage() {
 
       <form
         className="bg-white shadow-md rounded-lg p-4 sm:p-6 w-full max-w-sm sm:max-w-md flex flex-col space-y-4"
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
       >
         <input
           type="text"
-          name="name"
           placeholder="Your Name"
-          value={formData.name}
-          onChange={handleChange}
-          className="w-full border border-gray-300 rounded-lg p-2 focus:outline-amber-900"
-          required
+          {...register("name", { required: "Name is required" })}
+          className={`w-full border rounded-lg p-2 focus:outline-amber-900 ${
+            errors.name ? "border-red-500" : "border-gray-300"
+          }`}
         />
+        {errors.name && (
+          <span className="text-red-500 text-sm">{errors.name.message}</span>
+        )}
 
         <input
           type="email"
-          name="email"
           placeholder="Your Email"
-          value={formData.email}
-          onChange={handleChange}
-          className="w-full border border-gray-300 rounded-lg p-2 focus:outline-amber-900"
-          required
+          {...register("email", {
+            required: "Email is required",
+            pattern: {
+              value:
+                /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+              message: "Invalid email address",
+            },
+          })}
+          className={`w-full border rounded-lg p-2 focus:outline-amber-900 ${
+            errors.email ? "border-red-500" : "border-gray-300"
+          }`}
         />
+        {errors.email && (
+          <span className="text-red-500 text-sm">{errors.email.message}</span>
+        )}
 
         <textarea
-          name="message"
           placeholder="Your Message"
-          value={formData.message}
-          onChange={handleChange}
-          className="w-full border border-gray-300 rounded-lg p-2 focus:outline-amber-900 resize-none"
           rows={5}
-          required
+          {...register("message", { required: "Message is required" })}
+          className={`w-full border rounded-lg p-2 focus:outline-amber-900 resize-none ${
+            errors.message ? "border-red-500" : "border-gray-300"
+          }`}
         ></textarea>
+        {errors.message && (
+          <span className="text-red-500 text-sm">{errors.message.message}</span>
+        )}
 
         <button
           type="submit"
-          className="w-full bg-amber-900 text-white py-2 rounded-lg hover:bg-amber-800 transition"
+          disabled={isSubmitting}
+          className="w-full bg-amber-900 text-white py-2 rounded-lg hover:bg-amber-800 transition disabled:opacity-50"
         >
-          Send Message
+          {isSubmitting ? "Sending..." : "Send Message"}
         </button>
       </form>
     </div>

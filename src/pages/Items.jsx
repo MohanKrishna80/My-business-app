@@ -1,7 +1,8 @@
 import React from "react";
 import ItemCard from "../components/Itemcard";
 import CategoryFilter from "../components/CategoryFilter";
-import {Link} from 'react-router-dom'
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const dummyItems = [
   {
@@ -132,28 +133,34 @@ const dummyItems = [
   },
 ];
 
+
 const Items = () => {
+  const searchText = useSelector((state) => state.Search);
   return (
     <div className="p-4 bg-amber-950">
       <h1 className="text-2xl text-white font-bold mb-4">All Items</h1>
 
       <CategoryFilter />
-    
+
       <div className="flex flex-wrap gap-4 justify-center">
-        {dummyItems.map((item) => (
-          <div
-            key={item.id}
-            className="w-full sm:w-[45%] md:w-[30%] lg:w-[18%]"
-          >
-            <ItemCard item={item} />
-          </div>
-        ))}
+        {dummyItems
+          .filter((item) =>
+            item.name.toLowerCase().includes(searchText.toLowerCase())
+          )
+          .map((item) => (
+            <div
+              key={item.id}
+              className="w-full sm:w-[45%] md:w-[30%] lg:w-[18%]"
+            >
+              <ItemCard item={item} />
+            </div>
+          ))}
       </div>
       <Link to="/cart" className="flex justify-center mt-4">
-          <button className="bg-green-600 text-white  px-6 py-3 rounded-lg shadow-lg hover:bg-green-700 transition-all text-lg font-semibold">
-            Selected List
-          </button>
-        </Link>
+        <button className="bg-green-600 text-white  px-6 py-3 rounded-lg shadow-lg hover:bg-green-700 transition-all text-lg font-semibold">
+          Selected List
+        </button>
+      </Link>
     </div>
   );
 };

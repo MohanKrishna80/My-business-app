@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import {setValue} from "../redux/slices/searchslice"
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const searchText=useSelector((state)=>state.Search)
+  console.log(searchText)
+  const dispatch=useDispatch()
 
   const navItems = [
     { name: "Home", path: "/" },
@@ -25,6 +30,8 @@ export default function Navbar() {
           type="search"
           placeholder="Search"
           className="flex-1 max-w-xl mx-3 sm:mx-5 bg-white text-amber-950 text-base rounded-lg outline-none pl-4 py-1"
+          value={searchText}
+          onChange={(e)=>dispatch(setValue(e.target.value))}
         />
 
        
