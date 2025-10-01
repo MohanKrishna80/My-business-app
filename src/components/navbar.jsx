@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import {setValue} from "../redux/slices/searchslice"
+import {setValue} from "../redux/slices/searchSlice"
 import { useDispatch, useSelector } from "react-redux";
 
 export default function Navbar() {
